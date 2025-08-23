@@ -1,66 +1,63 @@
-# Technology Stack & Build System
+---
+inclusion: always
+---
 
-## Core Technologies
+# Technology Stack & Implementation Guidelines
 
-- **HTML5**: Semantic markup with modern web standards
-- **CSS3**: Advanced styling with gradients, flexbox, grid, and responsive design
-- **Vanilla JavaScript**: ES6+ features, no external frameworks or libraries
-- **Canvas API**: For SVG to PNG conversion processing
-- **File API**: For reading uploaded files
-- **Drag and Drop API**: For intuitive file upload experience
+## Required Technologies
+- **Vanilla JavaScript ES6+**: No external frameworks or libraries allowed
+- **HTML5 Canvas API**: Primary method for SVG to PNG conversion
+- **File API + FileReader**: Handle SVG file uploads and content reading
+- **Drag and Drop API**: Enable intuitive file upload UX
 
-## Browser APIs Used
+## Critical Browser APIs
+- `Canvas.getContext('2d')` - Core conversion engine
+- `FileReader.readAsText()` - SVG content extraction
+- `DOMParser.parseFromString()` - Safe SVG parsing
+- `URL.createObjectURL()` + `URL.revokeObjectURL()` - Download management
 
-- `FileReader` - Reading SVG file content
-- `Canvas 2D Context` - Drawing SVG content for conversion
-- `Blob` and `URL.createObjectURL()` - Generating downloadable PNG files
-- `DOMParser` - Parsing SVG content safely
+## Mandatory Architecture Pattern
+Use exactly these four classes with specific responsibilities:
+```javascript
+class AppState {
+  // Single source of truth for application state
+  // Must implement observer pattern for UI updates
+}
 
-## Architecture Patterns
+class FileHandler {
+  // File validation (10MB limit, SVG format check)
+  // Error handling with Japanese messages
+}
 
-- **Class-based Organization**: Separate classes for different concerns
-  - `AppState` - Centralized state management
-  - `FileHandler` - File operations and validation
-  - `SVGConverter` - Conversion logic
-  - `UIController` - UI interactions and updates
+class SVGConverter {
+  // Canvas-based conversion logic
+  // Memory cleanup after each conversion
+}
 
-- **Event-driven Architecture**: UI updates triggered by state changes
-- **Separation of Concerns**: Clear boundaries between data, logic, and presentation
-
-## Code Style Guidelines
-
-- **Japanese Comments**: All code comments and UI text in Japanese
-- **Descriptive Naming**: Use clear, descriptive variable and function names
-- **Error Handling**: Comprehensive try-catch blocks with user-friendly messages
-- **State Management**: Centralized state with proper change notifications
-- **Responsive Design**: Mobile-first CSS approach
-
-## File Structure
-
-```
-/
-├── index.html          # Main application entry point
-├── styles.css          # All styling and responsive design
-├── script.js           # Complete application logic
-└── test.svg           # Sample SVG file for testing
+class UIController {
+  // Event delegation and DOM manipulation
+  // State change listeners only
+}
 ```
 
-## Development Commands
+## Code Style Requirements
+- **Japanese UI Text**: All user-facing content in polite Japanese (丁寧語)
+- **Error Handling**: Wrap all async operations in try-catch with Japanese error messages
+- **Memory Management**: Always call `URL.revokeObjectURL()` and clear Canvas contexts
+- **State Updates**: UI changes only through AppState notifications, never direct DOM manipulation
 
-Since this is a client-side only application:
+## Performance Constraints
+- **File Size**: 10MB maximum, validate before processing
+- **Canvas Cleanup**: Clear context and revoke URLs after each conversion
+- **Timeout Handling**: Implement 30-second timeout for large file conversions
+- **Mobile Optimization**: Test on iOS Safari and Android Chrome
 
-- **Local Development**: Open `index.html` directly in browser or use a local server
-- **Testing**: Use browser developer tools and manual testing
-- **Debugging**: Browser DevTools console and network tab
+## File Organization
+- Single HTML file with embedded CSS and JavaScript (production)
+- Separate files during development: `index.html`, `styles.css`, `script.js`
+- Include test SVG files for validation
 
 ## Browser Compatibility
-
-- **Target**: Modern browsers (Chrome, Firefox, Safari, Edge)
-- **Minimum**: Browsers supporting ES6, Canvas API, and File API
-- **Mobile**: Responsive design for iOS Safari and Android Chrome
-
-## Performance Considerations
-
-- **File Size Limits**: 10MB maximum for SVG files
-- **Memory Management**: Clean up Canvas and Blob objects after use
-- **Processing Timeout**: Handle large file conversion timeouts gracefully
+- **Required**: ES6 classes, Canvas API, File API, Drag/Drop API
+- **Target**: Chrome 60+, Firefox 55+, Safari 12+, Edge 79+
+- **Mobile**: iOS Safari 12+, Android Chrome 60+
