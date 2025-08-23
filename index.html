@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to PNG Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SVG to PNG Converter</h1>
+            <p>SVGファイルをPNG形式に変換します</p>
+        </header>
+
+        <main>
+            <!-- ファイルアップロードエリア -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <p>SVGファイルをドラッグ&ドロップするか、クリックして選択してください</p>
+                        <input type="file" id="fileInput" accept=".svg,image/svg+xml" hidden>
+                        <button type="button" class="upload-btn" id="uploadBtn">ファイルを選択</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ファイル情報表示エリア -->
+            <section class="file-info" id="fileInfo" style="display: none;">
+                <h3>ファイル情報</h3>
+                <div class="info-content">
+                    <p><strong>ファイル名:</strong> <span id="fileName"></span></p>
+                    <p><strong>ファイルサイズ:</strong> <span id="fileSize"></span></p>
+                </div>
+            </section>
+
+            <!-- プレビューエリア -->
+            <section class="preview-section">
+                <div class="preview-container">
+                    <!-- SVGプレビュー -->
+                    <div class="preview-box" id="svgPreview" style="display: none;">
+                        <h3>SVGプレビュー</h3>
+                        <div class="preview-content" id="svgPreviewContent"></div>
+                    </div>
+
+                    <!-- PNGプレビュー -->
+                    <div class="preview-box" id="pngPreview" style="display: none;">
+                        <h3>PNGプレビュー</h3>
+                        <div class="preview-content" id="pngPreviewContent"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 変換オプションエリア -->
+            <section class="conversion-options" id="conversionOptions" style="display: none;">
+                <h3>変換オプション</h3>
+                <div class="options-content">
+                    <!-- 出力サイズ選択 -->
+                    <div class="option-group">
+                        <label class="option-label-text">出力サイズ</label>
+                        <div class="size-selection">
+                            <select id="sizePreset" class="size-dropdown">
+                                <option value="original">元のサイズ</option>
+                                <option value="100x100">100 × 100</option>
+                                <option value="200x200">200 × 200</option>
+                                <option value="500x500">500 × 500</option>
+                                <option value="1000x1000">1000 × 1000</option>
+                                <option value="custom">カスタムサイズ</option>
+                            </select>
+                        </div>
+                        <div class="custom-size-inputs" id="customSizeInputs" style="display: none;">
+                            <div class="size-input-group">
+                                <label for="customWidth">幅 (px):</label>
+                                <input type="number" id="customWidth" min="1" max="5000" placeholder="幅">
+                            </div>
+                            <div class="size-input-group">
+                                <label for="customHeight">高さ (px):</label>
+                                <input type="number" id="customHeight" min="1" max="5000" placeholder="高さ">
+                            </div>
+                            <div class="size-info">
+                                <small id="sizeInfo">アスペクト比を維持して調整されます</small>
+                            </div>
+                        </div>
+                        <p class="option-description">変換後のPNGファイルのサイズを選択してください</p>
+                    </div>
+
+                    <!-- 透明背景オプション -->
+                    <div class="option-group">
+                        <label class="option-label">
+                            <input type="checkbox" id="transparentBgOption" checked>
+                            <span class="checkmark"></span>
+                            <span class="option-text">透明背景を維持</span>
+                        </label>
+                        <p class="option-description">SVGの透明背景をPNGでも保持します</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- コントロールエリア -->
+            <section class="controls">
+                <button type="button" class="btn btn-primary" id="convertBtn" disabled>PNGに変換</button>
+                <button type="button" class="btn btn-success" id="downloadBtn" disabled>PNGをダウンロード</button>
+            </section>
+
+            <!-- メッセージエリア -->
+            <section class="message-area">
+                <div class="error-message" id="errorMessage" style="display: none;"></div>
+                <div class="success-message" id="successMessage" style="display: none;"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

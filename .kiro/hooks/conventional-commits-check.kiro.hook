@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Conventional Commits Validator",
+  "description": "Validates that git commit messages follow the Conventional Commits specification format",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".git/COMMIT_EDITMSG"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Please review the git commit message and ensure it follows the Conventional Commits specification. The format should be: type(scope): description. Common types include feat, fix, docs, style, refactor, test, chore. If the commit message doesn't follow this format, please suggest a corrected version that adheres to Conventional Commits standards."
+  }
+}
