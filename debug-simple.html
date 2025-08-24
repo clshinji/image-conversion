@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Image Converter - Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #007bff;
+        }
+
+        .upload-area.dragover {
+            border-color: #007bff;
+            background-color: #f0f8ff;
+        }
+
+        .upload-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .upload-btn:hover {
+            background: #0056b3;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .preview-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .preview-box img {
+            max-width: 100%;
+            max-height: 200px;
+            border: 1px solid #ddd;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .options {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .option-group {
+            margin: 15px 0;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .option-group select,
+        .option-group input[type="range"] {
+            width: 100%;
+            padding: 5px;
+        }
+
+        #qualityValue {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🖼️ Simple Image Converter</h1>
+    <p>画像ファイルを選択して、異なる形式に変換できます。</p>
+
+    <!-- ファイルアップロードエリア -->
+    <div class="upload-area" id="uploadArea">
+        <div>📁</div>
+        <p>画像ファイルをドラッグ&ドロップするか、クリックして選択してください</p>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <button class="upload-btn" id="uploadBtn">ファイルを選択</button>
+    </div>
+
+    <!-- メッセージエリア -->
+    <div class="message error" id="errorMessage"></div>
+    <div class="message success" id="successMessage"></div>
+    <div class="message info" id="infoMessage"></div>
+
+    <!-- 変換オプション -->
+    <div class="options" id="options" style="display: none;">
+        <h3>変換オプション</h3>
+
+        <div class="option-group">
+            <label for="targetFormat">変換先形式:</label>
+            <select id="targetFormat">
+                <option value="png">PNG</option>
+                <option value="jpg">JPG</option>
+                <option value="webp">WebP</option>
+                <option value="gif">GIF</option>
+            </select>
+        </div>
+
+        <div class="option-group" id="qualityGroup" style="display: none;">
+            <label for="qualitySlider">品質: <span id="qualityValue">90%</span></label>
+            <input type="range" id="qualitySlider" min="10" max="100" value="90">
+        </div>
+    </div>
+
+    <!-- プレビューエリア -->
+    <div class="preview-container" id="previewContainer" style="display: none;">
+        <div class="preview-box">
+            <h3>元画像</h3>
+            <div id="originalPreview"></div>
+        </div>
+        <div class="preview-box">
+            <h3>変換後</h3>
+            <div id="convertedPreview"></div>
+        </div>
+    </div>
+
+    <!-- コントロールボタン -->
+    <div class="controls">
+        <button class="btn btn-primary" id="convertBtn" disabled>変換実行</button>
+        <button class="btn btn-success" id="downloadBtn" disabled>ダウンロード</button>
+    </div>
+
+    <script>
+        // グローバル変数
+        let currentFile = null;
+        let convertedBlob = null;
+
+        // DOM要素の取得
+        const elements = {
+            uploadArea: document.getElementById('uploadArea'),
+            fileInput: document.getElementById('fileInput'),
+            uploadBtn: document.getElementById('uploadBtn'),
+            errorMessage: document.getElementById('errorMessage'),
+            successMessage: document.getElementById('successMessage'),
+            infoMessage: document.getElementById('infoMessage'),
+            options: document.getElementById('options'),
+            targetFormat: document.getElementById('targetFormat'),
+            qualityGroup: document.getElementById('qualityGroup'),
+            qualitySlider: document.getElementById('qualitySlider'),
+            qualityValue: document.getElementById('qualityValue'),
+            previewContainer: document.getElementById('previewContainer'),
+            originalPreview: document.getElementById('originalPreview'),
+            convertedPreview: document.getElementById('convertedPreview'),
+            convertBtn: document.getElementById('convertBtn'),
+            downloadBtn: document.getElementById('downloadBtn')
+        };
+
+        // 初期化
+        function init() {
+            console.log('アプリケーションを初期化中...');
+
+            // イベントリスナーの設定
+            setupEventListeners();
+
+            console.log('初期化完了');
+        }
+
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            // ファイル選択ボタン
+            elements.uploadBtn.addEventListener('click', () => {
+                console.log('ファイル選択ボタンがクリックされました');
+                elements.fileInput.click();
+            });
+
+            // アップロードエリアのクリック
+            elements.uploadArea.addEventListener('click', (event) => {
+                if (event.target !== elements.uploadBtn) {
+                    console.log('アップロードエリアがクリックされました');
+                    elements.fileInput.click();
+                }
+            });
+
+            // ファイル入力の変更
+            elements.fileInput.addEventListener('change', (event) => {
+                console.log('ファイル入力が変更されました');
+                const files = event.target.files;
+                if (files.length > 0) {
+                    handleFileSelection(files[0]);
+                }
+            });
+
+            // ドラッグ&ドロップ
+            elements.uploadArea.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                elements.uploadArea.classList.add('dragover');
+            });
+
+            elements.uploadArea.addEventListener('dragleave', (event) => {
+                event.preventDefault();
+                if (!elements.uploadArea.contains(event.relatedTarget)) {
+                    elements.uploadArea.classList.remove('dragover');
+                }
+            });
+
+            elements.uploadArea.addEventListener('drop', (event) => {
+                event.preventDefault();
+                elements.uploadArea.classList.remove('dragover');
+                console.log('ファイルがドロップされました');
+
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelection(files[0]);
+                }
+            });
+
+            // 変換先形式の変更
+            elements.targetFormat.addEventListener('change', (event) => {
+                const format = event.target.value;
+                updateFormatOptions(format);
+            });
+
+            // 品質スライダーの変更
+            elements.qualitySlider.addEventListener('input', (event) => {
+                const quality = event.target.value;
+                elements.qualityValue.textContent = quality + '%';
+            });
+
+            // 変換ボタン
+            elements.convertBtn.addEventListener('click', () => {
+                handleConversion();
+            });
+
+            // ダウンロードボタン
+            elements.downloadBtn.addEventListener('click', () => {
+                handleDownload();
+            });
+        }
+
+        // ファイル選択の処理
+        function handleFileSelection(file) {
+            console.log('ファイルが選択されました:', file.name, file.type, file.size);
+
+            try {
+                // 基本的な検証
+                if (!file.type.startsWith('image/')) {
+                    throw new Error('画像ファイルを選択してください');
+                }
+
+                // ファイルサイズチェック（10MB制限）
+                const maxSize = 10 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    throw new Error('ファイルサイズが大きすぎます（10MB以下にしてください）');
+                }
+
+                currentFile = file;
+
+                // プレビューの表示
+                displayFilePreview(file);
+
+                // オプションとコントロールを表示
+                elements.options.style.display = 'block';
+                elements.previewContainer.style.display = 'grid';
+                elements.convertBtn.disabled = false;
+
+                // 形式オプションを更新
+                updateFormatOptions(elements.targetFormat.value);
+
+                showMessage('ファイルが読み込まれました', 'success');
+
+            } catch (error) {
+                console.error('ファイル選択エラー:', error);
+                showMessage(error.message, 'error');
+            }
+        }
+
+        // ファイルプレビューの表示
+        function displayFilePreview(file) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const result = e.target.result;
+
+                if (file.type.startsWith('image/svg')) {
+                    // SVGファイルの場合
+                    elements.originalPreview.innerHTML = `
+                        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+                            ${result}
+                        </div>
+                        <p>ファイル名: ${file.name}</p>
+                        <p>サイズ: ${formatFileSize(file.size)}</p>
+                    `;
+                } else {
+                    // その他の画像ファイルの場合
+                    elements.originalPreview.innerHTML = `
+                        <img src="${result}" alt="Original image">
+                        <p>ファイル名: ${file.name}</p>
+                        <p>サイズ: ${formatFileSize(file.size)}</p>
+                    `;
+                }
+            };
+
+            reader.onerror = () => {
+                console.error('ファイル読み込みエラー');
+                showMessage('ファイルを読み込めませんでした', 'error');
+            };
+
+            // ファイルタイプに応じて読み込み方法を変更
+            if (file.type.startsWith('image/svg')) {
+                reader.readAsText(file);
+            } else {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 形式オプションの更新
+        function updateFormatOptions(format) {
+            // 品質設定の表示/非表示
+            if (format === 'jpg' || format === 'webp') {
+                elements.qualityGroup.style.display = 'block';
+            } else {
+                elements.qualityGroup.style.display = 'none';
+            }
+        }
+
+        // 変換処理
+        async function handleConversion() {
+            if (!currentFile) {
+                showMessage('変換するファイルが選択されていません', 'error');
+                return;
+            }
+
+            try {
+                showMessage('変換中...', 'info');
+                elements.convertBtn.disabled = true;
+
+                const targetFormat = elements.targetFormat.value;
+                const quality = parseInt(elements.qualitySlider.value) / 100;
+
+                convertedBlob = await convertImage(currentFile, targetFormat, quality);
+
+                // 変換後プレビューの表示
+                displayConvertedPreview(convertedBlob, targetFormat);
+
+                elements.downloadBtn.disabled = false;
+                showMessage('変換が完了しました', 'success');
+
+            } catch (error) {
+                console.error('変換エラー:', error);
+                showMessage(error.message, 'error');
+            } finally {
+                elements.convertBtn.disabled = false;
+            }
+        }
+
+        // 画像変換
+        function convertImage(file, targetFormat, quality) {
+            return new Promise((resolve, reject) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+
+                        // JPGの場合は白い背景を設定
+                        if (targetFormat === 'jpg') {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        }
+
+                        ctx.drawImage(img, 0, 0);
+
+                        const mimeType = getMimeType(targetFormat);
+                        const canvasQuality = (targetFormat === 'jpg' || targetFormat === 'webp') ? quality : undefined;
+
+                        canvas.toBlob(resolve, mimeType, canvasQuality);
+                    };
+
+                    img.onerror = () => reject(new Error('画像の読み込みに失敗しました'));
+
+                    if (file.type.startsWith('image/svg')) {
+                        // SVGの場合、Blobを作成してObject URLを使用
+                        const svgBlob = new Blob([e.target.result], { type: 'image/svg+xml' });
+                        img.src = URL.createObjectURL(svgBlob);
+                    } else {
+                        img.src = e.target.result;
+                    }
+                };
+
+                reader.onerror = () => reject(new Error('ファイルの読み込みに失敗しました'));
+
+                if (file.type.startsWith('image/svg')) {
+                    reader.readAsText(file);
+                } else {
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // MIMEタイプの取得
+        function getMimeType(format) {
+            const mimeTypes = {
+                'png': 'image/png',
+                'jpg': 'image/jpeg',
+                'webp': 'image/webp',
+                'gif': 'image/gif'
+            };
+            return mimeTypes[format] || 'image/png';
+        }
+
+        // 変換後プレビューの表示
+        function displayConvertedPreview(blob, format) {
+            const url = URL.createObjectURL(blob);
+
+            elements.convertedPreview.innerHTML = `
+                <img src="${url}" alt="Converted image">
+                <p>形式: ${format.toUpperCase()}</p>
+                <p>サイズ: ${formatFileSize(blob.size)}</p>
+            `;
+        }
+
+        // ダウンロード処理
+        function handleDownload() {
+            if (!convertedBlob || !currentFile) {
+                showMessage('ダウンロードするファイルがありません', 'error');
+                return;
+            }
+
+            try {
+                const targetFormat = elements.targetFormat.value;
+                const originalName = currentFile.name.split('.')[0];
+                const fileName = `${originalName}.${targetFormat}`;
+
+                const url = URL.createObjectURL(convertedBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.style.display = 'none';
+
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                showMessage('ダウンロードを開始しました', 'success');
+
+            } catch (error) {
+                console.error('ダウンロードエラー:', error);
+                showMessage('ダウンロードに失敗しました', 'error');
+            }
+        }
+
+        // メッセージ表示
+        function showMessage(message, type) {
+            // 全てのメッセージを非表示
+            elements.errorMessage.style.display = 'none';
+            elements.successMessage.style.display = 'none';
+            elements.infoMessage.style.display = 'none';
+
+            // 対応するメッセージを表示
+            let messageElement;
+            switch (type) {
+                case 'error':
+                    messageElement = elements.errorMessage;
+                    break;
+                case 'success':
+                    messageElement = elements.successMessage;
+                    break;
+                case 'info':
+                    messageElement = elements.infoMessage;
+                    break;
+                default:
+                    messageElement = elements.infoMessage;
+            }
+
+            messageElement.textContent = message;
+            messageElement.style.display = 'block';
+
+            // 自動非表示（エラー以外）
+            if (type !== 'error') {
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // ファイルサイズのフォーマット
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // ページ読み込み完了時に初期化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

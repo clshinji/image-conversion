@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG to PNG Converter</title>
+    <title>Multi-Format Image Converter</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>SVG to PNG Converter</h1>
-            <p>SVGファイルをPNG形式に変換します</p>
+            <h1>Multi-Format Image Converter</h1>
+            <p>画像ファイルを様々な形式に変換します（SVG、PNG、JPG、WebP、GIF対応）</p>
         </header>
 
         <main>
@@ -19,8 +19,8 @@
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-content">
                         <div class="upload-icon">📁</div>
-                        <p>SVGファイルをドラッグ&ドロップするか、クリックして選択してください</p>
-                        <input type="file" id="fileInput" accept=".svg,image/svg+xml" hidden>
+                        <p>画像ファイル（SVG、PNG、JPG、WebP、GIF）をドラッグ&ドロップするか、クリックして選択してください</p>
+                        <input type="file" id="fileInput" accept=".svg,.png,.jpg,.jpeg,.webp,.gif,image/svg+xml,image/png,image/jpeg,image/webp,image/gif" multiple hidden>
                         <button type="button" class="upload-btn" id="uploadBtn">ファイルを選択</button>
                     </div>
                 </div>
@@ -38,16 +38,16 @@
             <!-- プレビューエリア -->
             <section class="preview-section">
                 <div class="preview-container">
-                    <!-- SVGプレビュー -->
-                    <div class="preview-box" id="svgPreview" style="display: none;">
-                        <h3>SVGプレビュー</h3>
-                        <div class="preview-content" id="svgPreviewContent"></div>
+                    <!-- 元画像プレビュー -->
+                    <div class="preview-box" id="originalPreview" style="display: none;">
+                        <h3 id="originalPreviewTitle">元画像プレビュー</h3>
+                        <div class="preview-content" id="originalPreviewContent"></div>
                     </div>
 
-                    <!-- PNGプレビュー -->
-                    <div class="preview-box" id="pngPreview" style="display: none;">
-                        <h3>PNGプレビュー</h3>
-                        <div class="preview-content" id="pngPreviewContent"></div>
+                    <!-- 変換後プレビュー -->
+                    <div class="preview-box" id="convertedPreview" style="display: none;">
+                        <h3 id="convertedPreviewTitle">変換後プレビュー</h3>
+                        <div class="preview-content" id="convertedPreviewContent"></div>
                     </div>
                 </div>
             </section>
@@ -56,51 +56,111 @@
             <section class="conversion-options" id="conversionOptions" style="display: none;">
                 <h3>変換オプション</h3>
                 <div class="options-content">
-                    <!-- 出力サイズ選択 -->
+                    <!-- 変換先形式選択 -->
                     <div class="option-group">
+                        <label class="option-label-text">変換先形式</label>
+                        <div class="format-selection">
+                            <select id="targetFormat" class="format-dropdown">
+                                <option value="png">PNG</option>
+                                <option value="jpg">JPG</option>
+                                <option value="webp">WebP</option>
+                                <option value="gif">GIF</option>
+                                <option value="svg">SVG</option>
+                            </select>
+                        </div>
+                        <p class="option-description">変換後の画像形式を選択してください</p>
+                    </div>
+                    
+                    <!-- 出力サイズ選択 -->
+                    <div class="option-group" id="sizeGroup">
                         <label class="option-label-text">出力サイズ</label>
                         <div class="size-selection">
                             <select id="sizePreset" class="size-dropdown">
                                 <option value="original">元のサイズ</option>
-                                <option value="100x100">100 × 100</option>
-                                <option value="200x200">200 × 200</option>
-                                <option value="500x500">500 × 500</option>
-                                <option value="1000x1000">1000 × 1000</option>
+                                <option value="100x100">100 × 100 (アイコン)</option>
+                                <option value="200x200">200 × 200 (小)</option>
+                                <option value="500x500">500 × 500 (中)</option>
+                                <option value="1000x1000">1000 × 1000 (大)</option>
+                                <option value="1920x1080">1920 × 1080 (フルHD)</option>
                                 <option value="custom">カスタムサイズ</option>
                             </select>
                         </div>
+                        
+                        <!-- カスタムサイズ入力 -->
                         <div class="custom-size-inputs" id="customSizeInputs" style="display: none;">
-                            <div class="size-input-group">
-                                <label for="customWidth">幅 (px):</label>
-                                <input type="number" id="customWidth" min="1" max="5000" placeholder="幅">
+                            <div class="size-input-row" style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                                <div class="size-input-group">
+                                    <label for="customWidth">幅 (px)</label>
+                                    <input type="number" id="customWidth" min="1" max="10000" placeholder="幅" style="width: 80px;">
+                                </div>
+                                <div class="size-connector">×</div>
+                                <div class="size-input-group">
+                                    <label for="customHeight">高さ (px)</label>
+                                    <input type="number" id="customHeight" min="1" max="10000" placeholder="高さ" style="width: 80px;">
+                                </div>
                             </div>
-                            <div class="size-input-group">
-                                <label for="customHeight">高さ (px):</label>
-                                <input type="number" id="customHeight" min="1" max="5000" placeholder="高さ">
-                            </div>
-                            <div class="size-info">
-                                <small id="sizeInfo">アスペクト比を維持して調整されます</small>
+                            <div style="margin-top: 10px;">
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" id="maintainAspectRatio" checked>
+                                    <span>アスペクト比を維持</span>
+                                </label>
                             </div>
                         </div>
-                        <p class="option-description">変換後のPNGファイルのサイズを選択してください</p>
+                        
+                        <p class="option-description">変換後の画像サイズを選択してください（アスペクト比は自動的に維持されます）</p>
+                    </div>
+                    
+                    <!-- 品質設定 -->
+                    <div class="option-group" id="qualityGroup" style="display: none;">
+                        <label class="option-label-text">品質設定</label>
+                        <div class="quality-selection">
+                            <div class="quality-slider-container">
+                                <input type="range" id="qualitySlider" min="10" max="100" value="90" class="quality-slider">
+                                <div class="quality-value-container">
+                                    <span id="qualityValue" class="quality-value">90%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="option-description">JPG・WebP形式の圧縮品質を設定します</p>
                     </div>
 
-                    <!-- 透明背景オプション -->
-                    <div class="option-group">
-                        <label class="option-label">
-                            <input type="checkbox" id="transparentBgOption" checked>
-                            <span class="checkmark"></span>
-                            <span class="option-text">透明背景を維持</span>
-                        </label>
-                        <p class="option-description">SVGの透明背景をPNGでも保持します</p>
+                    <!-- 背景色設定 -->
+                    <div class="option-group" id="backgroundGroup">
+                        <label class="option-label-text">背景設定</label>
+                        
+                        <!-- 透明度オプション -->
+                        <div class="transparency-options">
+                            <label class="option-label">
+                                <input type="checkbox" id="transparentBgOption" checked>
+                                <span class="checkmark"></span>
+                                <span class="option-text">透明背景を維持</span>
+                            </label>
+                        </div>
+                        
+                        <!-- 背景色設定 -->
+                        <div class="background-color-group" id="backgroundColorGroup" style="display: none;">
+                            <div class="color-selection-header">
+                                <label for="backgroundColor" class="color-label">背景色</label>
+                            </div>
+                            
+                            <div class="color-picker-container">
+                                <input type="color" id="backgroundColor" value="#ffffff" class="color-picker">
+                            </div>
+                        </div>
+                        
+                        <p class="option-description" id="backgroundDescription">
+                            透明度をサポートしない形式（JPEG）では背景色が適用されます
+                        </p>
                     </div>
                 </div>
             </section>
 
             <!-- コントロールエリア -->
             <section class="controls">
-                <button type="button" class="btn btn-primary" id="convertBtn" disabled>PNGに変換</button>
-                <button type="button" class="btn btn-success" id="downloadBtn" disabled>PNGをダウンロード</button>
+                <div class="single-file-controls" id="singleFileControls">
+                    <button type="button" class="btn btn-primary" id="convertBtn" disabled>変換実行</button>
+                    <button type="button" class="btn btn-success" id="downloadBtn" disabled>ダウンロード</button>
+                </div>
             </section>
 
             <!-- メッセージエリア -->
@@ -111,6 +171,664 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // グローバル変数
+        let currentFile = null;
+        let convertedBlob = null;
+        
+        // DOM要素の取得
+        const elements = {
+            uploadArea: document.getElementById('uploadArea'),
+            fileInput: document.getElementById('fileInput'),
+            uploadBtn: document.getElementById('uploadBtn'),
+            fileInfo: document.getElementById('fileInfo'),
+            fileName: document.getElementById('fileName'),
+            fileSize: document.getElementById('fileSize'),
+            originalPreview: document.getElementById('originalPreview'),
+            originalPreviewContent: document.getElementById('originalPreviewContent'),
+            convertedPreview: document.getElementById('convertedPreview'),
+            convertedPreviewContent: document.getElementById('convertedPreviewContent'),
+            convertBtn: document.getElementById('convertBtn'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            errorMessage: document.getElementById('errorMessage'),
+            successMessage: document.getElementById('successMessage'),
+            conversionOptions: document.getElementById('conversionOptions'),
+            targetFormat: document.getElementById('targetFormat'),
+            qualityGroup: document.getElementById('qualityGroup'),
+            qualitySlider: document.getElementById('qualitySlider'),
+            qualityValue: document.getElementById('qualityValue'),
+            transparentBgOption: document.getElementById('transparentBgOption'),
+            backgroundColor: document.getElementById('backgroundColor'),
+            backgroundColorGroup: document.getElementById('backgroundColorGroup'),
+            sizeGroup: document.getElementById('sizeGroup'),
+            sizePreset: document.getElementById('sizePreset'),
+            customSizeInputs: document.getElementById('customSizeInputs'),
+            customWidth: document.getElementById('customWidth'),
+            customHeight: document.getElementById('customHeight'),
+            maintainAspectRatio: document.getElementById('maintainAspectRatio')
+        };
+        
+        // 初期化
+        function init() {
+            console.log('アプリケーションを初期化中...');
+            setupEventListeners();
+            console.log('初期化完了');
+        }
+        
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            // ファイル選択ボタン
+            elements.uploadBtn?.addEventListener('click', () => {
+                console.log('ファイル選択ボタンがクリックされました');
+                elements.fileInput?.click();
+            });
+            
+            // アップロードエリアのクリック
+            elements.uploadArea?.addEventListener('click', (event) => {
+                if (event.target !== elements.uploadBtn) {
+                    console.log('アップロードエリアがクリックされました');
+                    elements.fileInput?.click();
+                }
+            });
+            
+            // ファイル入力の変更
+            elements.fileInput?.addEventListener('change', (event) => {
+                console.log('ファイル入力が変更されました');
+                const files = event.target.files;
+                if (files.length > 0) {
+                    handleFileSelection(files[0]);
+                }
+            });
+            
+            // ドラッグ&ドロップ
+            elements.uploadArea?.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                elements.uploadArea.classList.add('dragover');
+            });
+            
+            elements.uploadArea?.addEventListener('dragleave', (event) => {
+                event.preventDefault();
+                if (!elements.uploadArea.contains(event.relatedTarget)) {
+                    elements.uploadArea.classList.remove('dragover');
+                }
+            });
+            
+            elements.uploadArea?.addEventListener('drop', (event) => {
+                event.preventDefault();
+                elements.uploadArea.classList.remove('dragover');
+                console.log('ファイルがドロップされました');
+                
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelection(files[0]);
+                }
+            });
+            
+            // 変換先形式の変更
+            elements.targetFormat?.addEventListener('change', (event) => {
+                const format = event.target.value;
+                updateFormatOptions(format);
+            });
+            
+            // 品質スライダーの変更
+            elements.qualitySlider?.addEventListener('input', (event) => {
+                const quality = event.target.value;
+                if (elements.qualityValue) {
+                    elements.qualityValue.textContent = quality + '%';
+                }
+            });
+            
+            // 透明背景オプションの変更
+            elements.transparentBgOption?.addEventListener('change', (event) => {
+                const transparent = event.target.checked;
+                updateBackgroundColorVisibility(transparent);
+            });
+            
+            // サイズプリセットの変更
+            elements.sizePreset?.addEventListener('change', (event) => {
+                const preset = event.target.value;
+                if (elements.customSizeInputs) {
+                    elements.customSizeInputs.style.display = preset === 'custom' ? 'block' : 'none';
+                }
+            });
+            
+            // カスタムサイズの変更（アスペクト比維持）
+            elements.customWidth?.addEventListener('input', (event) => {
+                if (elements.maintainAspectRatio?.checked && currentFile) {
+                    updateHeightFromWidth(parseInt(event.target.value));
+                }
+            });
+            
+            elements.customHeight?.addEventListener('input', (event) => {
+                if (elements.maintainAspectRatio?.checked && currentFile) {
+                    updateWidthFromHeight(parseInt(event.target.value));
+                }
+            });
+            
+            // 変換ボタン
+            elements.convertBtn?.addEventListener('click', () => {
+                handleConversion();
+            });
+            
+            // ダウンロードボタン
+            elements.downloadBtn?.addEventListener('click', () => {
+                handleDownload();
+            });
+        }
+        
+        // ファイル選択の処理
+        function handleFileSelection(file) {
+            console.log('ファイルが選択されました:', file.name, file.type, file.size);
+            
+            try {
+                // 基本的な検証
+                if (!file.type.startsWith('image/')) {
+                    throw new Error('画像ファイルを選択してください');
+                }
+                
+                // ファイルサイズチェック（10MB制限）
+                const maxSize = 10 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    throw new Error('ファイルサイズが大きすぎます（10MB以下にしてください）');
+                }
+                
+                currentFile = file;
+                
+                // ファイル情報の表示
+                if (elements.fileName) elements.fileName.textContent = file.name;
+                if (elements.fileSize) elements.fileSize.textContent = formatFileSize(file.size);
+                if (elements.fileInfo) elements.fileInfo.style.display = 'block';
+                if (elements.conversionOptions) elements.conversionOptions.style.display = 'block';
+                
+                // プレビューの表示
+                displayFilePreview(file);
+                
+                // 変換ボタンを有効化
+                if (elements.convertBtn) {
+                    elements.convertBtn.disabled = false;
+                }
+                
+                // 形式オプションを更新
+                updateFormatOptions(elements.targetFormat?.value || 'png');
+                
+                showMessage('ファイルが読み込まれました', 'success');
+                
+            } catch (error) {
+                console.error('ファイル選択エラー:', error);
+                showMessage(error.message, 'error');
+            }
+        }
+        
+        // ファイルプレビューの表示
+        function displayFilePreview(file) {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                const result = e.target.result;
+                
+                if (!elements.originalPreview || !elements.originalPreviewContent) return;
+                
+                // プレビュー内容をクリア
+                elements.originalPreviewContent.innerHTML = '';
+                
+                if (file.type.startsWith('image/svg')) {
+                    // SVGファイルの場合
+                    const svgContainer = document.createElement('div');
+                    svgContainer.innerHTML = result;
+                    svgContainer.style.cssText = `
+                        max-width: 100%;
+                        max-height: 300px;
+                        overflow: hidden;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        background: #f9f9f9;
+                    `;
+                    
+                    const svgElement = svgContainer.querySelector('svg');
+                    if (svgElement) {
+                        svgElement.style.cssText = `
+                            max-width: 100%;
+                            max-height: 100%;
+                            width: auto;
+                            height: auto;
+                        `;
+                    }
+                    
+                    elements.originalPreviewContent.appendChild(svgContainer);
+                } else {
+                    // その他の画像ファイルの場合
+                    const img = document.createElement('img');
+                    img.src = result;
+                    img.style.cssText = `
+                        max-width: 100%;
+                        max-height: 300px;
+                        width: auto;
+                        height: auto;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                    `;
+                    
+                    img.onerror = () => {
+                        elements.originalPreviewContent.innerHTML = `
+                            <div style="padding: 20px; text-align: center; color: #666; border: 1px solid #ddd; border-radius: 4px;">
+                                プレビューを表示できません
+                            </div>
+                        `;
+                    };
+                    
+                    elements.originalPreviewContent.appendChild(img);
+                }
+                
+                // プレビューエリアを表示
+                elements.originalPreview.style.display = 'block';
+            };
+            
+            reader.onerror = () => {
+                console.error('ファイル読み込みエラー');
+                showMessage('ファイルを読み込めませんでした', 'error');
+            };
+            
+            // ファイルタイプに応じて読み込み方法を変更
+            if (file.type.startsWith('image/svg')) {
+                reader.readAsText(file);
+            } else {
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // 形式オプションの更新
+        function updateFormatOptions(format) {
+            // 品質設定の表示/非表示
+            if (elements.qualityGroup) {
+                if (format === 'jpg' || format === 'jpeg' || format === 'webp') {
+                    elements.qualityGroup.style.display = 'block';
+                } else {
+                    elements.qualityGroup.style.display = 'none';
+                }
+            }
+            
+            // サイズ設定の表示/非表示（SVGから他形式への変換時のみ）
+            if (elements.sizeGroup) {
+                if (currentFile && currentFile.type.startsWith('image/svg') && format !== 'svg') {
+                    elements.sizeGroup.style.display = 'block';
+                } else {
+                    elements.sizeGroup.style.display = 'none';
+                }
+            }
+            
+            // 背景色設定の表示/非表示
+            updateBackgroundColorVisibility(elements.transparentBgOption?.checked !== false);
+        }
+        
+        // 背景色表示の更新
+        function updateBackgroundColorVisibility(transparent) {
+            const targetFormat = elements.targetFormat?.value || 'png';
+            
+            if (elements.backgroundColorGroup) {
+                // JPEGの場合は常に背景色を表示
+                if (targetFormat === 'jpg' || targetFormat === 'jpeg') {
+                    elements.backgroundColorGroup.style.display = 'block';
+                    // 透明背景オプションを無効化
+                    if (elements.transparentBgOption) {
+                        elements.transparentBgOption.checked = false;
+                        elements.transparentBgOption.disabled = true;
+                    }
+                } else {
+                    // その他の形式では透明背景でない場合のみ表示
+                    elements.backgroundColorGroup.style.display = transparent ? 'none' : 'block';
+                    // 透明背景オプションを有効化
+                    if (elements.transparentBgOption) {
+                        elements.transparentBgOption.disabled = false;
+                    }
+                }
+            }
+        }
+        
+        // 変換処理
+        async function handleConversion() {
+            if (!currentFile) {
+                showMessage('変換するファイルが選択されていません', 'error');
+                return;
+            }
+            
+            try {
+                showMessage('変換中...', 'info');
+                if (elements.convertBtn) elements.convertBtn.disabled = true;
+                
+                const targetFormat = elements.targetFormat?.value || 'png';
+                const quality = parseInt(elements.qualitySlider?.value || '90') / 100;
+                
+                convertedBlob = await convertImage(currentFile, targetFormat, quality);
+                
+                // 変換後プレビューの表示
+                displayConvertedPreview(convertedBlob, targetFormat);
+                
+                if (elements.downloadBtn) elements.downloadBtn.disabled = false;
+                showMessage('変換が完了しました', 'success');
+                
+            } catch (error) {
+                console.error('変換エラー:', error);
+                showMessage(error.message, 'error');
+            } finally {
+                if (elements.convertBtn) elements.convertBtn.disabled = false;
+            }
+        }
+        
+        // 画像変換
+        function convertImage(file, targetFormat, quality) {
+            return new Promise((resolve, reject) => {
+                // SVG形式への変換の場合
+                if (targetFormat === 'svg') {
+                    if (file.type.startsWith('image/svg')) {
+                        // SVGからSVGの場合はそのまま返す
+                        resolve(file);
+                    } else {
+                        // 他の形式からSVGへの変換は現在サポートしていない
+                        reject(new Error('SVG形式への変換は、SVGファイルからのみサポートされています'));
+                    }
+                    return;
+                }
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    
+                    img.onload = () => {
+                        // サイズの決定
+                        let canvasWidth, canvasHeight;
+                        const sizePreset = elements.sizePreset?.value || 'original';
+                        const originalWidth = img.width || 300;
+                        const originalHeight = img.height || 300;
+                        const aspectRatio = originalWidth / originalHeight;
+                        
+                        if (sizePreset === 'original') {
+                            canvasWidth = originalWidth;
+                            canvasHeight = originalHeight;
+                        } else if (sizePreset === 'custom') {
+                            const customWidth = parseInt(elements.customWidth?.value || '300');
+                            const customHeight = parseInt(elements.customHeight?.value || '300');
+                            
+                            // アスペクト比維持のチェック
+                            if (elements.maintainAspectRatio?.checked) {
+                                // 幅を基準にアスペクト比を維持
+                                canvasWidth = customWidth;
+                                canvasHeight = Math.round(customWidth / aspectRatio);
+                            } else {
+                                canvasWidth = customWidth;
+                                canvasHeight = customHeight;
+                            }
+                        } else {
+                            // プリセットサイズの解析（例: "500x500"）
+                            const sizeParts = sizePreset.split('x');
+                            if (sizeParts.length === 2) {
+                                const presetWidth = parseInt(sizeParts[0]);
+                                const presetHeight = parseInt(sizeParts[1]);
+                                
+                                // アスペクト比を維持して、指定されたサイズ内に収まるように調整
+                                if (aspectRatio > 1) {
+                                    // 横長の場合：幅を基準にする
+                                    canvasWidth = presetWidth;
+                                    canvasHeight = Math.round(presetWidth / aspectRatio);
+                                } else {
+                                    // 縦長または正方形の場合：高さを基準にする
+                                    canvasHeight = presetHeight;
+                                    canvasWidth = Math.round(presetHeight * aspectRatio);
+                                }
+                            } else {
+                                canvasWidth = originalWidth;
+                                canvasHeight = originalHeight;
+                            }
+                        }
+                        
+                        canvas.width = canvasWidth;
+                        canvas.height = canvasHeight;
+                        
+                        // JPGの場合は背景色を設定
+                        if (targetFormat === 'jpg' || targetFormat === 'jpeg') {
+                            const bgColor = elements.backgroundColor?.value || '#ffffff';
+                            ctx.fillStyle = bgColor;
+                            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+                        }
+                        
+                        // 画像を描画（アスペクト比を維持してスケール）
+                        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                        
+                        const mimeType = getMimeType(targetFormat);
+                        const canvasQuality = (targetFormat === 'jpg' || targetFormat === 'webp') ? quality : undefined;
+                        
+                        canvas.toBlob(resolve, mimeType, canvasQuality);
+                    };
+                    
+                    img.onerror = () => reject(new Error('画像の読み込みに失敗しました'));
+                    
+                    if (file.type.startsWith('image/svg')) {
+                        // SVGの場合、Blobを作成してObject URLを使用
+                        const svgBlob = new Blob([e.target.result], { type: 'image/svg+xml' });
+                        img.src = URL.createObjectURL(svgBlob);
+                    } else {
+                        img.src = e.target.result;
+                    }
+                };
+                
+                reader.onerror = () => reject(new Error('ファイルの読み込みに失敗しました'));
+                
+                if (file.type.startsWith('image/svg')) {
+                    reader.readAsText(file);
+                } else {
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // MIMEタイプの取得
+        function getMimeType(format) {
+            const mimeTypes = {
+                'png': 'image/png',
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'webp': 'image/webp',
+                'gif': 'image/gif',
+                'svg': 'image/svg+xml'
+            };
+            return mimeTypes[format] || 'image/png';
+        }
+        
+        // 変換後プレビューの表示
+        function displayConvertedPreview(blob, format) {
+            if (!elements.convertedPreview || !elements.convertedPreviewContent) return;
+            
+            // プレビュー内容をクリア
+            elements.convertedPreviewContent.innerHTML = '';
+            
+            if (format === 'svg') {
+                // SVGの場合は特別な処理
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const svgContainer = document.createElement('div');
+                    svgContainer.innerHTML = e.target.result;
+                    svgContainer.style.cssText = `
+                        max-width: 100%;
+                        max-height: 300px;
+                        overflow: hidden;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        background: #f9f9f9;
+                    `;
+                    const svgElement = svgContainer.querySelector('svg');
+                    if (svgElement) {
+                        svgElement.style.cssText = `
+                            max-width: 100%;
+                            max-height: 100%;
+                            width: auto;
+                            height: auto;
+                        `;
+                    }
+                    elements.convertedPreviewContent.appendChild(svgContainer);
+                };
+                reader.readAsText(blob);
+            } else {
+                // その他の形式の場合
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(blob);
+                img.style.cssText = `
+                    max-width: 100%;
+                    max-height: 300px;
+                    width: auto;
+                    height: auto;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                `;
+                elements.convertedPreviewContent.appendChild(img);
+            }
+            
+            // プレビューエリアを表示
+            elements.convertedPreview.style.display = 'block';
+            
+            // ファイル情報を表示
+            const fileInfo = document.createElement('div');
+            fileInfo.style.cssText = 'margin-top: 10px; font-size: 14px; color: #666;';
+            fileInfo.innerHTML = `
+                <div>形式: ${format.toUpperCase()}</div>
+                <div>サイズ: ${formatFileSize(blob.size)}</div>
+            `;
+            elements.convertedPreviewContent.appendChild(fileInfo);
+        }
+        
+        // ダウンロード処理
+        function handleDownload() {
+            if (!convertedBlob || !currentFile) {
+                showMessage('ダウンロードするファイルがありません', 'error');
+                return;
+            }
+            
+            try {
+                const targetFormat = elements.targetFormat?.value || 'png';
+                const originalName = currentFile.name.split('.')[0];
+                const fileName = `${originalName}.${targetFormat}`;
+                
+                const url = URL.createObjectURL(convertedBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.style.display = 'none';
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                
+                showMessage('ダウンロードを開始しました', 'success');
+                
+            } catch (error) {
+                console.error('ダウンロードエラー:', error);
+                showMessage('ダウンロードに失敗しました', 'error');
+            }
+        }
+        
+        // メッセージ表示
+        function showMessage(message, type) {
+            // 全てのメッセージを非表示
+            if (elements.errorMessage) elements.errorMessage.style.display = 'none';
+            if (elements.successMessage) elements.successMessage.style.display = 'none';
+            
+            // 対応するメッセージを表示
+            let messageElement;
+            switch (type) {
+                case 'error':
+                    messageElement = elements.errorMessage;
+                    break;
+                case 'success':
+                case 'info':
+                    messageElement = elements.successMessage;
+                    break;
+                default:
+                    messageElement = elements.successMessage;
+            }
+            
+            if (messageElement) {
+                messageElement.textContent = message;
+                messageElement.style.display = 'block';
+                
+                // 自動非表示（エラー以外）
+                if (type !== 'error') {
+                    setTimeout(() => {
+                        messageElement.style.display = 'none';
+                    }, 5000);
+                }
+            }
+        }
+        
+        // ファイルサイズのフォーマット
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // 画像のアスペクト比を取得
+        function getImageAspectRatio() {
+            return new Promise((resolve) => {
+                if (!currentFile) {
+                    resolve(1);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const aspectRatio = (img.width || 300) / (img.height || 300);
+                        resolve(aspectRatio);
+                    };
+                    img.onerror = () => resolve(1);
+                    
+                    if (currentFile.type.startsWith('image/svg')) {
+                        const svgBlob = new Blob([e.target.result], { type: 'image/svg+xml' });
+                        img.src = URL.createObjectURL(svgBlob);
+                    } else {
+                        img.src = e.target.result;
+                    }
+                };
+                reader.onerror = () => resolve(1);
+                
+                if (currentFile.type.startsWith('image/svg')) {
+                    reader.readAsText(currentFile);
+                } else {
+                    reader.readAsDataURL(currentFile);
+                }
+            });
+        }
+        
+        // 幅から高さを計算（アスペクト比維持）
+        async function updateHeightFromWidth(width) {
+            if (!currentFile || !elements.customHeight) return;
+            const aspectRatio = await getImageAspectRatio();
+            const height = Math.round(width / aspectRatio);
+            elements.customHeight.value = height;
+        }
+        
+        // 高さから幅を計算（アスペクト比維持）
+        async function updateWidthFromHeight(height) {
+            if (!currentFile || !elements.customWidth) return;
+            const aspectRatio = await getImageAspectRatio();
+            const width = Math.round(height * aspectRatio);
+            elements.customWidth.value = width;
+        }
+        
+        // ページ読み込み完了時に初期化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
