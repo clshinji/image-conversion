@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画像変換くん - かんたん画像フォーマット変換</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎨 画像変換くん</h1>
+            <h1><img src="favicon.png" alt="画像変換くん" class="app-icon"> 画像変換くん</h1>
             <p>どんな画像でもパパッと変換！SVG、PNG、JPG、WebP、GIFに対応だよ〜</p>
         </header>
 
@@ -451,9 +452,9 @@
                 }
             }
             
-            // サイズ設定の表示/非表示（SVGから他形式への変換時のみ）
+            // サイズ設定の表示/非表示（すべての画像形式で利用可能）
             if (elements.sizeGroup) {
-                if (currentFile && currentFile.type.startsWith('image/svg') && format !== 'svg') {
+                if (currentFile && format !== 'svg') {
                     elements.sizeGroup.style.display = 'block';
                 } else {
                     elements.sizeGroup.style.display = 'none';
