@@ -1,3 +1,10 @@
+/* GitHub Pages対応 - 強制スタイル適用 */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 /* リセットとベーススタイル */
 * {
     margin: 0;
@@ -32,7 +39,10 @@ header {
     padding: 20px 0;
 }
 
-header h1 {
+/* ヘッダータイトル - GitHub Pages対応強化版 */
+.container header h1,
+header h1,
+h1 {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -41,17 +51,28 @@ header h1 {
     font-size: 2.5rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    flex-wrap: nowrap !important;
+    line-height: 1.2 !important;
 }
 
+/* アイコンスタイル - GitHub Pages対応強化版 */
+.container header h1 .app-icon,
+header h1 .app-icon,
+h1 .app-icon,
 .app-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-right: 8px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
 }
 
 header p {
@@ -259,13 +280,11 @@ header p {
     left: 0;
     right: 0;
     bottom: 0;
-    background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(0, 0, 0, 0.02) 10px,
-        rgba(0, 0, 0, 0.02) 20px
-    );
+    background: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(0, 0, 0, 0.02) 10px,
+            rgba(0, 0, 0, 0.02) 20px);
     pointer-events: none;
 }
 
@@ -438,13 +457,13 @@ header p {
     transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.option-label input[type="checkbox"]:checked + .checkmark {
+.option-label input[type="checkbox"]:checked+.checkmark {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-color: #667eea;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
-.option-label input[type="checkbox"]:checked + .checkmark::after {
+.option-label input[type="checkbox"]:checked+.checkmark::after {
     transform: rotate(45deg) scale(1);
 }
 
@@ -677,7 +696,8 @@ header p {
     gap: 12px;
 }
 
-.current-size, .output-size {
+.current-size,
+.output-size {
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -1185,7 +1205,7 @@ header p {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
+    background-image:
         linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
         linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
         linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
@@ -1215,7 +1235,7 @@ header p {
 
 /* 透明背景表示用のチェッカーボードパターン */
 .transparency-background {
-    background-image: 
+    background-image:
         linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
         linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
         linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
@@ -1305,14 +1325,27 @@ header p {
 }
 
 @keyframes pulse-success {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1.05); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1.05);
+    }
 }
 
 @keyframes glow-ready {
-    0% { box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4); }
-    100% { box-shadow: 0 12px 35px rgba(23, 162, 184, 0.6); }
+    0% {
+        box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 12px 35px rgba(23, 162, 184, 0.6);
+    }
 }
 
 /* PNG プレビューエラーのスタイル */
@@ -1492,6 +1525,7 @@ header p {
 
 /* Mobile First Approach - Base styles for mobile (320px+) */
 @media screen and (max-width: 767px) {
+
     /* Container adjustments for mobile */
     .container {
         margin: 10px;
@@ -2082,6 +2116,7 @@ header p {
 
 /* Prevent zoom on input focus (iOS) */
 @media screen and (max-width: 767px) {
+
     input[type="number"],
     input[type="color"],
     select {
@@ -2091,6 +2126,7 @@ header p {
 
 /* ===== TABLET RESPONSIVE DESIGN (768px - 1023px) ===== */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
+
     /* Container adjustments for tablet */
     .container {
         max-width: 900px;
@@ -2504,6 +2540,7 @@ header p {
 
 /* Tablet portrait specific optimizations */
 @media screen and (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+
     /* Maximize vertical space usage */
     .preview-container {
         gap: 24px;
@@ -2601,6 +2638,7 @@ header p {
 
 /* ===== DESKTOP RESPONSIVE DESIGN (1024px+) ===== */
 @media screen and (min-width: 1024px) {
+
     /* Container adjustments for desktop */
     .container {
         max-width: 1400px;
@@ -3170,7 +3208,9 @@ header p {
 }
 
 /* High DPI display optimization */
-@media screen and (min-resolution: 2dppx), screen and (-webkit-min-device-pixel-ratio: 2) {
+@media screen and (min-resolution: 2dppx),
+screen and (-webkit-min-device-pixel-ratio: 2) {
+
     /* Sharper borders and shadows for high DPI */
     .container,
     .preview-box,
@@ -3330,48 +3370,49 @@ header p {
 
 /* Desktop-only features */
 @media screen and (min-width: 1024px) {
+
     /* Show additional details on desktop */
     .desktop-details {
         display: block;
     }
-    
+
     /* Enhanced hover states */
     .quality-preset-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
     }
-    
+
     .color-preset-btn:hover {
         transform: translateY(-2px) scale(1.05);
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
     }
-    
+
     .size-action-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
     }
-    
+
     /* Smooth scrolling for desktop */
     html {
         scroll-behavior: smooth;
     }
-    
+
     /* Custom scrollbar for desktop */
     ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
     }
-    
+
     ::-webkit-scrollbar-track {
         background: #f1f1f1;
         border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
     }
@@ -3382,7 +3423,7 @@ header p {
     .mobile-only {
         display: none !important;
     }
-    
+
     .camera-btn {
         display: none !important;
     }
@@ -3393,12 +3434,13 @@ header p {
     .desktop-only {
         display: none !important;
     }
-    
+
     .desktop-details {
         display: none !important;
     }
-}スタイル */
-.success-content {
+}
+
+スタイル */ .success-content {
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -3591,7 +3633,7 @@ header p {
     gap: 12px;
 }
 
-.loading-content > div:first-child {
+.loading-content>div:first-child {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -3623,9 +3665,17 @@ header p {
     animation: loading-dots 1.4s ease-in-out infinite both;
 }
 
-.loading-dots div:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots div:nth-child(2) { animation-delay: -0.16s; }
-.loading-dots div:nth-child(3) { animation-delay: 0s; }
+.loading-dots div:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots div:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.loading-dots div:nth-child(3) {
+    animation-delay: 0s;
+}
 
 .loading-pulse {
     background: #1565c0;
@@ -3675,18 +3725,40 @@ header p {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes loading-dots {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1); }
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
 }
 
 @keyframes loading-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.7; }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
 }
 
 /* レスポンシブデザイン */
@@ -3699,11 +3771,11 @@ header p {
         margin-bottom: 15px;
         padding: 18px;
     }
-    
+
     .preview-container {
         gap: 20px;
     }
-    
+
     .controls {
         gap: 20px;
     }
@@ -3717,98 +3789,98 @@ header p {
         margin-bottom: 10px;
         border-radius: 16px;
     }
-    
+
     header {
         margin-bottom: 32px;
         padding: 16px 0;
     }
-    
+
     header h1 {
         font-size: 2.2rem;
     }
-    
+
     header p {
         font-size: 1rem;
     }
-    
+
     /* プレビューを縦並びに */
     .preview-container {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .preview-box {
         padding: 20px;
     }
-    
+
     .preview-content {
         min-height: 200px;
     }
-    
+
     /* コントロールボタンを縦並びに */
     .controls {
         flex-direction: column;
         align-items: center;
         gap: 16px;
     }
-    
+
     .btn {
         width: 100%;
         max-width: 320px;
         padding: 14px 28px;
     }
-    
+
     .upload-area {
         padding: 40px 20px;
     }
-    
+
     .upload-content {
         gap: 16px;
     }
-    
+
     /* ファイル情報のレイアウト調整 */
     .file-info {
         padding: 20px;
     }
-    
+
     /* 変換オプションのレイアウト調整 */
     .conversion-options {
         padding: 20px;
     }
-    
+
     .conversion-options h3 {
         font-size: 1.1rem;
         margin-bottom: 16px;
     }
-    
+
     .option-label {
         padding: 10px 14px;
     }
-    
+
     .option-text {
         font-size: 0.95rem;
     }
-    
+
     .option-description {
         font-size: 0.85rem;
         padding-left: 28px;
     }
-    
+
     /* サイズ選択UIの調整 */
     .size-dropdown {
         padding: 10px 14px;
         font-size: 0.95rem;
     }
-    
+
     .custom-size-inputs {
         padding: 16px;
     }
-    
+
     .size-input-group input[type="number"] {
         padding: 8px 10px;
         font-size: 0.9rem;
     }
-    
+
     /* PNG情報の幅調整 */
     .png-info {
         max-width: 100%;
@@ -3821,23 +3893,23 @@ header p {
         padding: 14px;
         border-radius: 12px;
     }
-    
+
     header h1 {
         font-size: 2rem;
     }
-    
+
     .upload-area {
         padding: 32px 16px;
     }
-    
+
     .upload-icon {
         font-size: 3.5rem;
     }
-    
+
     .preview-content {
         min-height: 180px;
     }
-    
+
     .btn {
         max-width: 280px;
         font-size: 0.95rem;
@@ -3850,43 +3922,43 @@ header p {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 8px;
     }
-    
+
     .container {
         padding: 12px;
         margin-top: 8px;
         margin-bottom: 8px;
         border-radius: 12px;
     }
-    
+
     header {
         margin-bottom: 24px;
         padding: 12px 0;
     }
-    
+
     header h1 {
         font-size: 1.8rem;
         line-height: 1.2;
     }
-    
+
     header p {
         font-size: 0.95rem;
     }
-    
+
     /* アップロードエリアの最適化 */
     .upload-area {
         padding: 24px 12px;
         border-width: 2px;
     }
-    
+
     .upload-area p {
         font-size: 0.95rem;
         line-height: 1.4;
     }
-    
+
     .upload-icon {
         font-size: 3rem;
     }
-    
+
     .upload-btn {
         padding: 12px 24px;
         font-size: 0.9rem;
@@ -3894,98 +3966,98 @@ header p {
         width: 100%;
         max-width: 200px;
     }
-    
+
     /* プレビューエリアの最適化 */
     .preview-box {
         padding: 16px;
     }
-    
+
     .preview-box h3 {
         font-size: 1rem;
         margin-bottom: 12px;
     }
-    
+
     .preview-content {
         min-height: 160px;
         border-radius: 8px;
     }
-    
+
     .preview-content svg,
     .preview-content img {
         max-height: 200px;
     }
-    
+
     /* ボタンの最適化 */
     .controls {
         gap: 12px;
         margin-bottom: 24px;
     }
-    
+
     .btn {
         max-width: 100%;
         padding: 12px 24px;
         font-size: 0.9rem;
         min-width: auto;
     }
-    
+
     /* ファイル情報の最適化 */
     .file-info {
         padding: 16px;
     }
-    
+
     .file-info h3 {
         font-size: 1.1rem;
         margin-bottom: 12px;
     }
-    
+
     .info-content p {
         font-size: 0.9rem;
         margin-bottom: 8px;
     }
-    
+
     /* 変換オプションの最適化 */
     .conversion-options {
         padding: 16px;
         margin-bottom: 24px;
     }
-    
+
     .conversion-options h3 {
         font-size: 1rem;
         margin-bottom: 12px;
     }
-    
+
     .option-label {
         padding: 8px 12px;
         gap: 10px;
     }
-    
+
     .option-text {
         font-size: 0.9rem;
     }
-    
+
     .option-description {
         font-size: 0.8rem;
         padding-left: 24px;
     }
-    
+
     .checkmark {
         width: 18px;
         height: 18px;
     }
-    
+
     .checkmark::after {
         left: 5px;
         top: 1px;
         width: 5px;
         height: 9px;
     }
-    
+
     /* サイズ選択UIの最適化 */
     .option-label-text {
         font-size: 0.9rem;
         margin-bottom: 10px;
     }
-    
+
     .size-dropdown {
         padding: 8px 12px;
         font-size: 0.9rem;
@@ -3993,29 +4065,29 @@ header p {
         background-size: 14px;
         background-position: right 10px center;
     }
-    
+
     .custom-size-inputs {
         padding: 12px;
         margin-top: 12px;
     }
-    
+
     .size-input-group {
         margin-bottom: 12px;
     }
-    
+
     .size-input-group label {
         font-size: 0.85rem;
     }
-    
+
     .size-input-group input[type="number"] {
         padding: 6px 8px;
         font-size: 0.85rem;
     }
-    
+
     .size-info small {
         font-size: 0.8rem;
     }
-    
+
     /* メッセージエリアの最適化 */
     .error-message,
     .success-message,
@@ -4024,13 +4096,13 @@ header p {
         font-size: 0.9rem;
         border-radius: 8px;
     }
-    
+
     /* PNG情報の最適化 */
     .png-info {
         padding: 12px;
         font-size: 0.85rem;
     }
-    
+
     .info-row {
         margin-bottom: 4px;
     }
@@ -4041,27 +4113,27 @@ header p {
     .container {
         padding: 10px;
     }
-    
+
     header h1 {
         font-size: 1.6rem;
     }
-    
+
     .upload-area {
         padding: 20px 10px;
     }
-    
+
     .upload-area p {
         font-size: 0.9rem;
     }
-    
+
     .upload-icon {
         font-size: 2.5rem;
     }
-    
+
     .preview-content {
         min-height: 140px;
     }
-    
+
     .btn {
         padding: 10px 20px;
         font-size: 0.85rem;
@@ -4070,17 +4142,19 @@ header p {
 
 /* タッチデバイス向けの操作性向上 */
 @media (hover: none) and (pointer: coarse) {
+
     /* タッチデバイス用のスタイル */
     .upload-area {
         padding: 40px 20px;
     }
-    
+
     .upload-btn,
     .btn {
-        min-height: 48px; /* タッチターゲットサイズ */
+        min-height: 48px;
+        /* タッチターゲットサイズ */
         padding: 14px 28px;
     }
-    
+
     /* ホバー効果を無効化 */
     .upload-area:hover,
     .btn:hover,
@@ -4090,19 +4164,21 @@ header p {
         transform: none;
         box-shadow: inherit;
     }
-    
+
     /* タップ時のフィードバック */
     .upload-area:active {
         transform: scale(0.98);
     }
-    
+
     .btn:active:not(:disabled) {
         transform: scale(0.95);
     }
 }
 
 /* 高解像度ディスプレイ対応 */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
     .preview-content svg,
     .preview-content img {
         image-rendering: -webkit-optimize-contrast;
@@ -4118,6 +4194,7 @@ header p {
 
 /* 縮小モーション設定を尊重 */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -4125,7 +4202,7 @@ header p {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-    
+
     .btn::before,
     .upload-area::before {
         transition: none;
@@ -4137,24 +4214,25 @@ header p {
     body {
         background: white;
     }
-    
+
     .container {
         box-shadow: none;
         background: white;
         border: 1px solid #ccc;
     }
-    
+
     .upload-area,
     .controls,
     .message-area {
         display: none;
     }
-    
+
     .preview-box {
         box-shadow: none;
         border: 1px solid #ccc;
     }
 }
+
 /* レスポンシブ
 ユーティリティクラス */
 .mobile-only {
@@ -4169,7 +4247,7 @@ header p {
     .mobile-only {
         display: block;
     }
-    
+
     .desktop-only {
         display: none;
     }
@@ -4187,22 +4265,54 @@ header p {
 }
 
 /* スペーシングユーティリティ */
-.mt-small { margin-top: 8px; }
-.mt-medium { margin-top: 16px; }
-.mt-large { margin-top: 24px; }
+.mt-small {
+    margin-top: 8px;
+}
 
-.mb-small { margin-bottom: 8px; }
-.mb-medium { margin-bottom: 16px; }
-.mb-large { margin-bottom: 24px; }
+.mt-medium {
+    margin-top: 16px;
+}
 
-.p-small { padding: 8px; }
-.p-medium { padding: 16px; }
-.p-large { padding: 24px; }
+.mt-large {
+    margin-top: 24px;
+}
+
+.mb-small {
+    margin-bottom: 8px;
+}
+
+.mb-medium {
+    margin-bottom: 16px;
+}
+
+.mb-large {
+    margin-bottom: 24px;
+}
+
+.p-small {
+    padding: 8px;
+}
+
+.p-medium {
+    padding: 16px;
+}
+
+.p-large {
+    padding: 24px;
+}
 
 /* テキストユーティリティ */
-.text-center { text-align: center; }
-.text-small { font-size: 0.875rem; }
-.text-large { font-size: 1.125rem; }
+.text-center {
+    text-align: center;
+}
+
+.text-small {
+    font-size: 0.875rem;
+}
+
+.text-large {
+    font-size: 1.125rem;
+}
 
 /* レスポンシブ画像 */
 .responsive-image {
@@ -4222,19 +4332,19 @@ header p {
         max-width: 1300px;
         padding: 32px;
     }
-    
+
     header h1 {
         font-size: 3rem;
     }
-    
+
     .preview-container {
         gap: 32px;
     }
-    
+
     .preview-content {
         min-height: 280px;
     }
-    
+
     .btn {
         padding: 18px 36px;
         font-size: 1.1rem;
@@ -4247,11 +4357,13 @@ header p {
         max-width: 1400px;
         padding: 40px;
     }
-    
+
     .preview-content {
         min-height: 320px;
     }
-}/* バッチ
+}
+
+/* バッチ
 処理関連スタイル */
 
 /* バッチモード切り替え */
@@ -4303,11 +4415,11 @@ header p {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.switch-label input:checked + .switch-slider {
+.switch-label input:checked+.switch-slider {
     background: #667eea;
 }
 
-.switch-label input:checked + .switch-slider::before {
+.switch-label input:checked+.switch-slider::before {
     transform: translateX(26px);
 }
 
@@ -4394,11 +4506,25 @@ header p {
     flex-shrink: 0;
 }
 
-.file-icon.svg { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
-.file-icon.png { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
-.file-icon.jpg { background: linear-gradient(135deg, #feca57, #ff9ff3); }
-.file-icon.webp { background: linear-gradient(135deg, #48dbfb, #0abde3); }
-.file-icon.gif { background: linear-gradient(135deg, #ff9ff3, #f368e0); }
+.file-icon.svg {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.file-icon.png {
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+}
+
+.file-icon.jpg {
+    background: linear-gradient(135deg, #feca57, #ff9ff3);
+}
+
+.file-icon.webp {
+    background: linear-gradient(135deg, #48dbfb, #0abde3);
+}
+
+.file-icon.gif {
+    background: linear-gradient(135deg, #ff9ff3, #f368e0);
+}
 
 .file-details {
     flex: 1;
@@ -4624,39 +4750,40 @@ header p {
         gap: 15px;
         align-items: stretch;
     }
-    
+
     .batch-actions {
         justify-content: center;
     }
-    
+
     .file-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
-    
+
     .file-meta {
         flex-direction: column;
         gap: 5px;
     }
-    
+
     .file-actions {
         align-self: flex-end;
     }
-    
+
     .batch-summary {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .batch-controls {
         flex-direction: column;
     }
-    
+
     .btn-large {
         width: 100%;
     }
 }
+
 /* ======
 ==================================
    ステップガイダンス UI
@@ -4950,7 +5077,7 @@ header p {
     flex-shrink: 0;
 }
 
-.setting-toggle input[type="checkbox"]:checked + .checkmark {
+.setting-toggle input[type="checkbox"]:checked+.checkmark {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-color: #667eea;
 }
@@ -4968,7 +5095,7 @@ header p {
     transition: transform 0.2s ease;
 }
 
-.setting-toggle input[type="checkbox"]:checked + .checkmark::after {
+.setting-toggle input[type="checkbox"]:checked+.checkmark::after {
     transform: rotate(45deg) scale(1);
 }
 
@@ -4989,10 +5116,13 @@ header p {
 }
 
 @keyframes guidancePulse {
-    0%, 100% { 
+
+    0%,
+    100% {
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
     }
-    50% { 
+
+    50% {
         box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.3);
     }
 }
@@ -5173,6 +5303,7 @@ header p {
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -5184,6 +5315,7 @@ header p {
         transform: translateX(0);
         opacity: 1;
     }
+
     to {
         transform: translateX(100%);
         opacity: 0;
@@ -5195,6 +5327,7 @@ header p {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -5206,6 +5339,7 @@ header p {
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.9);
@@ -5226,28 +5360,37 @@ header p {
 }
 
 @keyframes pulseLight {
-    0%, 100% { 
+
+    0%,
+    100% {
         box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.3);
     }
-    50% { 
+
+    50% {
         box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.1);
     }
 }
 
 @keyframes pulseNormal {
-    0%, 100% { 
+
+    0%,
+    100% {
         box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.5);
     }
-    50% { 
+
+    50% {
         box-shadow: 0 0 0 12px rgba(102, 126, 234, 0.2);
     }
 }
 
 @keyframes pulseStrong {
-    0%, 100% { 
+
+    0%,
+    100% {
         box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
     }
-    50% { 
+
+    50% {
         box-shadow: 0 0 0 16px rgba(102, 126, 234, 0.3);
     }
 }
@@ -5266,21 +5409,51 @@ header p {
 }
 
 @keyframes shakeLight {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-2px); }
-    75% { transform: translateX(2px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-2px);
+    }
+
+    75% {
+        transform: translateX(2px);
+    }
 }
 
 @keyframes shakeNormal {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
 }
 
 @keyframes shakeStrong {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    75% {
+        transform: translateX(8px);
+    }
 }
 
 /* バウンス効果 */
@@ -5297,18 +5470,39 @@ header p {
 }
 
 @keyframes bounceSmall {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
 }
 
 @keyframes bounceNormal {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 @keyframes bounceLarge {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
 }
 
 /* グロー効果 */
@@ -5369,8 +5563,13 @@ header p {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* ========================================
@@ -5514,7 +5713,7 @@ header p {
     color: #2c3e50;
 }
 
-.solution-section > p {
+.solution-section>p {
     color: #495057;
     margin-bottom: 16px;
     line-height: 1.5;
@@ -5661,39 +5860,39 @@ header p {
         right: 10px;
         top: 10px;
     }
-    
+
     .feedback-container {
         right: 10px;
         top: 10px;
         max-width: calc(100vw - 20px);
     }
-    
+
     .feedback-item.feedback-center {
         width: calc(100vw - 40px);
         max-width: 350px;
     }
-    
+
     .modal-content {
         margin: 10px;
         max-height: calc(100vh - 20px);
     }
-    
+
     .step-navigation {
         flex-direction: column;
     }
-    
+
     .nav-btn {
         width: 100%;
     }
-    
+
     .guidance-header {
         padding: 12px 16px;
     }
-    
+
     .guidance-content {
         padding: 16px;
     }
-    
+
     .step-header {
         flex-direction: column;
         align-items: flex-start;
@@ -5708,19 +5907,19 @@ header p {
         top: 0;
         border-radius: 0 0 16px 16px;
     }
-    
+
     .feedback-container {
         right: 0;
         top: 0;
         max-width: 100vw;
     }
-    
+
     .feedback-item {
         border-radius: 0;
         margin-bottom: 0;
         border-bottom: 1px solid #e9ecef;
     }
-    
+
     .feedback-item:last-child {
         border-bottom: none;
     }
@@ -5730,16 +5929,18 @@ header p {
    高DPIディスプレイ対応
 ======================================== */
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
     .guidance-icon,
     .feedback-icon {
         font-size: 1.1rem;
     }
-    
+
     .spinner-circle {
         border-width: 2px;
     }
-    
+
     .spinner-large .spinner-circle {
         border-width: 3px;
     }
@@ -5750,6 +5951,7 @@ header p {
 ======================================== */
 
 @media (prefers-color-scheme: dark) {
+
     .step-guidance,
     .feedback-item,
     .modal-content {
@@ -5757,23 +5959,23 @@ header p {
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.1);
     }
-    
+
     .guidance-title,
     .step-title,
     .feedback-message {
         color: #ecf0f1;
     }
-    
+
     .step-description,
     .step-tips li {
         color: #bdc3c7;
     }
-    
+
     .progress-bar,
     .feedback-progress .progress-bar {
         background: #34495e;
     }
-    
+
     .step-info,
     .step-tips,
     .error-summary {
@@ -5787,6 +5989,7 @@ header p {
 ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
     .step-guidance,
     .feedback-item,
     .nav-btn,
@@ -5796,7 +5999,7 @@ header p {
     .modal-close {
         transition: none;
     }
-    
+
     .guidance-pulse,
     .pulse-light,
     .pulse-normal,
@@ -5809,7 +6012,7 @@ header p {
     .bounce-large {
         animation: none;
     }
-    
+
     .spinner-circle {
         animation: none;
         border-top-color: transparent;
@@ -5828,22 +6031,25 @@ header p {
 
 /* 高コントラストモード対応 */
 @media (prefers-contrast: high) {
+
     .step-guidance,
     .feedback-item,
     .modal-content {
         border: 2px solid #000;
     }
-    
+
     .nav-btn,
     .feedback-action-btn {
         border: 2px solid #000;
     }
-    
+
     .progress-fill,
     .feedback-progress .progress-fill {
         background: #000;
     }
-}/* =
+}
+
+/* =
 =======================================
    リアルタイムプレビュー UI
 ======================================== */
@@ -5980,11 +6186,11 @@ header p {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.preview-toggle input[type="checkbox"]:checked + .toggle-slider {
+.preview-toggle input[type="checkbox"]:checked+.toggle-slider {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.preview-toggle input[type="checkbox"]:checked + .toggle-slider::after {
+.preview-toggle input[type="checkbox"]:checked+.toggle-slider::after {
     transform: translateX(20px);
 }
 
@@ -6281,14 +6487,14 @@ header p {
         align-items: stretch;
         gap: 16px;
     }
-    
+
     .preview-mode-controls,
     .preview-zoom-controls,
     .preview-options {
         justify-content: center;
         flex-wrap: wrap;
     }
-    
+
     .comparison-container {
         height: 400px;
     }
@@ -6298,54 +6504,54 @@ header p {
     .preview-controls {
         padding: 16px;
     }
-    
+
     .preview-toolbar {
         gap: 12px;
     }
-    
+
     .mode-buttons,
     .zoom-buttons {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .mode-btn,
     .zoom-btn,
     .preview-btn {
         padding: 6px 10px;
         font-size: 0.8rem;
     }
-    
+
     .mode-text,
     .preview-text {
         display: none;
     }
-    
+
     .comparison-container {
         height: 300px;
     }
-    
+
     .comparison-container.mode-side-by-side .original-layer,
     .comparison-container.mode-side-by-side .converted-layer {
         width: 100%;
         height: 50%;
         left: 0;
     }
-    
+
     .comparison-container.mode-side-by-side .original-layer {
         border-right: none;
         border-bottom: 1px solid #e9ecef;
     }
-    
+
     .comparison-container.mode-side-by-side .converted-layer {
         top: 50%;
     }
-    
+
     .preview-info-bar {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .info-item {
         justify-content: space-between;
     }
@@ -6355,7 +6561,7 @@ header p {
     .preview-controls {
         padding: 12px;
     }
-    
+
     .mode-btn,
     .zoom-btn,
     .preview-btn {
@@ -6363,36 +6569,36 @@ header p {
         min-width: 40px;
         justify-content: center;
     }
-    
+
     .mode-icon,
     .zoom-icon,
     .preview-icon {
         font-size: 1.2rem;
     }
-    
+
     .control-label {
         font-size: 0.8rem;
     }
-    
+
     .zoom-level {
         font-size: 0.8rem;
         padding: 4px 8px;
         min-width: 45px;
     }
-    
+
     .toggle-text {
         font-size: 0.8rem;
     }
-    
+
     .comparison-container {
         height: 250px;
     }
-    
+
     .split-divider::before,
     .split-divider::after {
         display: none;
     }
-    
+
     .divider-handle {
         width: 28px;
         height: 28px;
@@ -6408,32 +6614,32 @@ header p {
     .comparison-viewport {
         cursor: default;
     }
-    
+
     .mode-btn:hover,
     .zoom-btn:hover,
     .preview-btn:hover {
         transform: none;
         box-shadow: none;
     }
-    
+
     .mode-btn:active,
     .zoom-btn:active,
     .preview-btn:active {
         transform: scale(0.95);
     }
-    
+
     .split-divider {
         width: 8px;
         cursor: default;
     }
-    
+
     .split-divider::before,
     .split-divider::after {
         left: -12px;
         width: 32px;
         height: 32px;
     }
-    
+
     .divider-handle {
         width: 40px;
         height: 40px;
@@ -6445,27 +6651,28 @@ header p {
 ======================================== */
 
 @media (prefers-contrast: high) {
+
     .preview-controls,
     .comparison-container {
         border: 2px solid #000;
     }
-    
+
     .mode-btn,
     .zoom-btn,
     .preview-btn {
         border: 2px solid #000;
     }
-    
+
     .mode-btn.active {
         background: #000;
         color: #fff;
     }
-    
+
     .split-divider {
         background: #000;
         box-shadow: none;
     }
-    
+
     .divider-handle {
         background: #000;
         box-shadow: none;
@@ -6477,19 +6684,20 @@ header p {
 ======================================== */
 
 @media (prefers-color-scheme: dark) {
+
     .preview-controls,
     .comparison-container {
         background: linear-gradient(145deg, #2c3e50 0%, #34495e 100%);
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.1);
     }
-    
+
     .control-label,
     .info-label,
     .info-value {
         color: #ecf0f1;
     }
-    
+
     .mode-btn,
     .zoom-btn,
     .preview-btn {
@@ -6497,26 +6705,26 @@ header p {
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.2);
     }
-    
+
     .zoom-level {
         background: linear-gradient(145deg, #34495e 0%, #2c3e50 100%);
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.2);
     }
-    
+
     .preview-info-bar {
         background: linear-gradient(145deg, #34495e 0%, #2c3e50 100%);
         border-color: rgba(255, 255, 255, 0.1);
     }
-    
+
     .image-label {
         background: rgba(0, 0, 0, 0.8);
     }
-    
+
     .loading-text {
         color: #bdc3c7;
     }
-    
+
     .preview-loading .spinner-circle {
         border-color: #34495e;
         border-top-color: #667eea;
@@ -6528,6 +6736,7 @@ header p {
 ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
     .mode-btn,
     .zoom-btn,
     .preview-btn,
@@ -6538,12 +6747,14 @@ header p {
     .divider-handle {
         transition: none;
     }
-    
+
     .preview-loading .spinner-circle {
         animation: none;
         border-top-color: transparent;
     }
-}/* =====
+}
+
+/* =====
 ===================================
    詳細情報パネル UI
 ======================================== */
@@ -7043,7 +7254,7 @@ header p {
     .detailed-info-panel {
         width: 350px;
     }
-    
+
     .info-grid {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -7057,65 +7268,65 @@ header p {
         top: 10px;
         max-height: calc(100vh - 20px);
     }
-    
+
     .info-panel-header {
         padding: 12px 16px;
     }
-    
+
     .panel-title {
         font-size: 1rem;
     }
-    
+
     .info-panel-content {
         padding: 16px;
     }
-    
+
     .info-section {
         margin-bottom: 16px;
     }
-    
+
     .section-header {
         padding: 10px 12px;
     }
-    
+
     .section-content {
         padding: 12px;
     }
-    
+
     .card-header {
         padding: 10px 12px;
     }
-    
+
     .card-content {
         padding: 10px 12px;
     }
-    
+
     .info-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 2px;
     }
-    
+
     .info-value {
         text-align: left;
     }
-    
+
     .chart-summary {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .summary-item {
         flex-direction: row;
         justify-content: space-between;
     }
-    
+
     .metric-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
     }
-    
+
     .quality-bar {
         width: 100%;
     }
@@ -7129,57 +7340,57 @@ header p {
         border-radius: 0;
         max-height: 100vh;
     }
-    
+
     .info-panel-header {
         padding: 10px 12px;
     }
-    
+
     .panel-title {
         font-size: 0.9rem;
     }
-    
+
     .panel-controls {
         gap: 4px;
     }
-    
+
     .panel-toggle-btn,
     .panel-close-btn {
         width: 28px;
         height: 28px;
     }
-    
+
     .info-panel-content {
         padding: 12px;
     }
-    
+
     .section-title {
         font-size: 0.9rem;
     }
-    
+
     .card-title {
         font-size: 0.8rem;
     }
-    
+
     .info-row,
     .detail-item,
     .metric-item {
         font-size: 0.8rem;
     }
-    
+
     .chart-title,
     .detail-title {
         font-size: 0.8rem;
     }
-    
+
     .export-btn {
         padding: 8px 12px;
         font-size: 0.8rem;
     }
-    
+
     .bar {
         font-size: 0.75rem;
     }
-    
+
     .bar-label,
     .bar-value {
         min-width: 50px;
@@ -7191,6 +7402,7 @@ header p {
 ======================================== */
 
 @media (hover: none) and (pointer: coarse) {
+
     .panel-toggle-btn:hover,
     .panel-close-btn:hover,
     .section-toggle:hover,
@@ -7198,17 +7410,17 @@ header p {
         transform: none;
         box-shadow: none;
     }
-    
+
     .panel-toggle-btn:active,
     .panel-close-btn:active,
     .section-toggle:active {
         transform: scale(0.95);
     }
-    
+
     .export-btn:active {
         transform: scale(0.98);
     }
-    
+
     .section-header {
         padding: 14px 16px;
     }
@@ -7219,6 +7431,7 @@ header p {
 ======================================== */
 
 @media (prefers-contrast: high) {
+
     .detailed-info-panel,
     .info-section,
     .info-card,
@@ -7226,21 +7439,21 @@ header p {
     .detail-group {
         border: 2px solid #000;
     }
-    
+
     .export-btn {
         border: 2px solid #000;
     }
-    
+
     .bar-fill,
     .quality-fill {
         background: #000 !important;
     }
-    
+
     .card-badge.original {
         background: #000;
         color: #fff;
     }
-    
+
     .card-badge.converted {
         background: #000;
         color: #fff;
@@ -7252,6 +7465,7 @@ header p {
 ======================================== */
 
 @media (prefers-color-scheme: dark) {
+
     .detailed-info-panel,
     .info-section,
     .info-card,
@@ -7261,7 +7475,7 @@ header p {
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.1);
     }
-    
+
     .panel-title,
     .section-title,
     .card-title,
@@ -7269,27 +7483,27 @@ header p {
     .detail-title {
         color: #ecf0f1;
     }
-    
+
     .info-label,
     .detail-label,
     .metric-label,
     .summary-label {
         color: #bdc3c7;
     }
-    
+
     .info-value,
     .detail-value,
     .summary-value,
     .quality-score {
         color: #ecf0f1;
     }
-    
+
     .export-btn {
         background: linear-gradient(145deg, #34495e 0%, #2c3e50 100%);
         color: #ecf0f1;
         border-color: rgba(255, 255, 255, 0.2);
     }
-    
+
     .quality-bar {
         background: #34495e;
     }
@@ -7300,6 +7514,7 @@ header p {
 ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
     .detailed-info-panel,
     .panel-toggle-btn,
     .panel-close-btn,
